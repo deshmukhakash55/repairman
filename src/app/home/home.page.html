@@ -1,0 +1,104 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="selectedRepairman">
+        <ion-back-button defaultHref="tabs/home" text="" (click)="backToHome()"></ion-back-button>
+    </ion-buttons>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <ion-select value="add1" okText="Okay" cancelText="Dismiss">
+            <ion-select-option value="add1">Home</ion-select-option>
+            <ion-select-option value="add2">Office</ion-select-option>
+            <ion-select-option value="add3">Home2</ion-select-option>
+            <ion-select-option value="add4">Sister's Home</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="8" style="padding-top: 0%;">
+          <ion-item style="--inner-border-width: 0px;">
+            <ion-title style="padding-left: 0%;">
+              Home
+            </ion-title>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header> -->
+
+<app-header></app-header>
+
+<ion-content>
+  <div *ngIf="!selectedRepairman">
+    <ion-card class="welcome-card" *ngFor="let repairman of repairmen" (click)="selectRepairman(repairman)">
+      <ion-img src="/assets/{{ repairman.id }}.jpg"></ion-img>
+      <ion-card-header>
+        <ion-card-title>{{ repairman.name }}</ion-card-title>
+        <ion-card-subtitle>{{  repairman.ability }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ repairman.stars }} stars</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-grid *ngIf="selectedRepairman">
+    <ion-row>
+      <ion-col>
+        <ion-img src="/assets/{{ selectedRepairman.id }}.jpg"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row margin-vertical>
+      <ion-col size="10">
+        <ion-title style="text-align: left;padding-left: 13%;">{{ selectedRepairman.name }}</ion-title>
+      </ion-col>
+      <ion-col size="2" style="padding-left: 0%;" padding-horizontal>
+        <ion-button class="primary" (click)="presentConfirmCallOption()">
+          <ion-icon name="call"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row margin-vertical>
+      <ion-col offset="1" size="9">
+        <ion-icon name="hammer"></ion-icon> {{ selectedRepairman.ability }}    
+      </ion-col>
+      <ion-col size="2">
+        {{ selectedRepairman.stars }} <ion-icon name="star"></ion-icon> 
+      </ion-col>
+    </ion-row>
+    <ion-row margin-vertical padding-start>
+      <ion-col>
+        Charges : <span style="color: rgb(56, 128, 255);">Rs.50/hr</span>
+      </ion-col>
+    </ion-row>
+    <ion-row margin-vertical padding-start>
+      <ion-col>
+        Estimated time to reach : 20 - 30 min.   
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+<!--   
+  <ion-card *ngIf="authenticated">
+    <ion-card-header>
+      <ion-button (click)="getUserInfo()">Get User Details</ion-button>
+      <ion-button (click)="signOut()">Sign Out</ion-button>
+    </ion-card-header>
+
+    <ion-card *ngIf="userInfo">
+      <ion-card-header>
+        User Info
+      </ion-card-header>
+      <ion-card-content>
+        {{userInfo | json}}
+      </ion-card-content>
+    </ion-card>
+    <ion-card *ngIf="action">
+      <ion-card-header>
+        Action Data
+      </ion-card-header>
+      <ion-card-content>
+        {{action | json}}
+      </ion-card-content>
+    </ion-card>
+  </ion-card> -->
+</ion-content> 

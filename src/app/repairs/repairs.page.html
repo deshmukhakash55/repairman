@@ -1,0 +1,55 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="selectedRepair">
+        <ion-back-button defaultHref="tabs/repairs" text="" (click)="backToMyRepairs()"></ion-back-button>
+    </ion-buttons>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <ion-select value="add1" okText="Okay" cancelText="Dismiss">
+            <ion-select-option value="add1">Home</ion-select-option>
+            <ion-select-option value="add2">Office</ion-select-option>
+            <ion-select-option value="add3">Home2</ion-select-option>
+            <ion-select-option value="add4">Sister's Home</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col size="8" offset="1" style="padding-top: 0%;">
+          <ion-item style="--inner-border-width: 0px;">
+            <ion-title style="padding-left: 0%;">
+              My Repairs
+            </ion-title>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header> -->
+
+<app-header></app-header>
+
+<ion-content>
+
+  <div *ngIf="repairs">
+    <ion-card class="welcome-card" *ngFor="let repair of repairs">
+      <ion-img src="/assets/{{ repair.repairman.id }}.jpg"></ion-img>
+      <ion-card-header>
+        <ion-card-title>
+          {{ repair.repairman.name }}
+          <ion-button class="primary" style="float: right;margin-top: 0px;margin-right: 0px;" (click)="selectRepair(repair)">
+            <ion-icon name="locate"></ion-icon>
+          </ion-button>
+        </ion-card-title>
+        <ion-card-subtitle>{{  repair.repairman.ability }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content style="padding-top: 0%;">
+        <p *ngIf="repair.status === 'active'" style="color: darkgreen">Arriving soon.....</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="!repairs" style="width: 100%;height: 100%;text-align: center;padding-top: 50%;">
+      No Repairs!
+  </div>
+
+</ion-content>
+  
