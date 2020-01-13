@@ -5,14 +5,14 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: 'account.page.html',
   styleUrls: ['account.page.scss']
 })
-export class AccountPage implements OnInit{
+export class AccountPage implements OnInit {
 
-  @Input('headerTitle') public headerTitle:string;
+  public title: string;
 
-  constructor() {}
-
-  public ngOnInit(): void {
-    this.headerTitle = 'Account';
+  constructor() {
+    this.title = 'Account';
   }
+
+  public ngOnInit(): void {}
 
 }

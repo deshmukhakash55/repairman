@@ -57,7 +57,7 @@ export class RepairmanService {
   }
 
   public removeRepairman(repairman: Repairman): void {
-    this.repairmen.splice(this.repairmen.indexOf(repairman), 1);
+    delete this.repairmen[this.repairmen.indexOf(repairman)];
   }
 
   public selectRepairman(repairman: Repairman): void{

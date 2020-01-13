@@ -1,40 +1,28 @@
-import { RepairmanService } from './../services/repairman.service';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewChecked } from '@angular/core';
 import { Address } from '../services/commontypes';
 import { AddressService } from '../services/address.service';
-import { Repairman } from '../home/hometypes';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnChanges {
+export class HeaderComponent implements OnInit, AfterViewChecked {
 
-  public title: string;
-  public isRepairmanSelected: boolean;
+  @Input('title') public title: string;
+  @Output() backButtonClick = new EventEmitter<string>();
+  @Input('shouldShowBackButton')public shouldShowBackButton: boolean;
   public addresses: Address[];
   public selectedAddress: Address;
-  public showInproperAddressPopup: boolean;
-  public shouldShowBackButton: boolean;
   public backUrl: string;
 
   constructor(
-    private addressService: AddressService, private repairmanService: RepairmanService,
-    private router: Router
+    private addressService: AddressService
     ) {}
 
-  public ngOnInit() {
-    this.title = this.getProperTitle(this.router.url);
-    this.repairmanService.getselectedRepairmanFromHome().subscribe( (repairman: Repairman) => {
-      if (repairman) {
-        this.isRepairmanSelected = true;
-        return;
-      }
-      this.isRepairmanSelected = false;
-    });
+  public ngOnInit(): void {
 
+    this.backUrl = this.loadBackUrl();
 
     this.addressService.getAddresses().subscribe( (addresses: Address[]) => {
       this.addresses = addresses;
@@ -49,26 +37,24 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   }
 
-  public ngOnChanges(changes: ng)
+  public ngAfterViewChecked(): void {
+    this.addressService.getSelectedAddress().subscribe( (address: Address) => {
+      this.selectedAddress = address;
+      if (!this.selectedAddress) {
+        this.selectedAddress = this.addresses[0];
+      }
+    });
+  }
 
-  private getProperTitle(url: string): string {
-    //Should be changed
-    if (url.indexOf('home') !== -1) {
-      return 'Home';
+  public moveBack(): void {
+    this.backButtonClick.emit('true');
+  }
+
+  private loadBackUrl(): string {
+    if (this.title === 'Home') {
+      return 'tabs/home';
     }
-    if (url.indexOf('repairs') !== -1) {
-      return 'My Repairs';
-    }
-    if (url.indexOf('account') !== -1) {
-      return 'Account';
-    }
-    if (url.indexOf('search') !== -1) {
-      return 'Search';
-    }
-    if (url.indexOf('track') !== -1) {
-      return 'Track';
-    }
-    return '';
+    return 'tabs/repairs';
   }
 
   public changeAddress(event: any): void {

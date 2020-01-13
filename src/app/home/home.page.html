@@ -25,18 +25,18 @@
   </ion-toolbar>
 </ion-header> -->
 
-<app-header></app-header>
+<app-header [title]="title" [shouldShowBackButton]="shouldShowBackButton" (backButtonClick)="unselectRepairman($event)"></app-header>
 
-<ion-content>
+<ion-content (ionScrollEnd)="scrollDown($event)" [scrollEvents]="true">
   <div *ngIf="!selectedRepairman">
-    <ion-card class="welcome-card" *ngFor="let repairman of repairmen" (click)="selectRepairman(repairman)">
+    <ion-card class="welcome-card" *ngFor="let repairman of repairmen;" (click)="selectRepairman(repairman)">
       <ion-img src="/assets/{{ repairman.id }}.jpg"></ion-img>
       <ion-card-header>
         <ion-card-title>{{ repairman.name }}</ion-card-title>
-        <ion-card-subtitle>{{  repairman.ability }}</ion-card-subtitle>
+        <ion-card-subtitle>{{ repairman.ability }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>{{ repairman.stars }} stars</p>
+        <app-stars [stars]="repairman.stars"></app-stars>
       </ion-card-content>
     </ion-card>
   </div>
@@ -62,7 +62,7 @@
         <ion-icon name="hammer"></ion-icon> {{ selectedRepairman.ability }}    
       </ion-col>
       <ion-col size="2">
-        {{ selectedRepairman.stars }} <ion-icon name="star"></ion-icon> 
+        {{ selectedRepairman.stars }} <ion-icon name="star" style="color: #CFB53B;"></ion-icon> 
       </ion-col>
     </ion-row>
     <ion-row margin-vertical padding-start>

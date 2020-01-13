@@ -20,12 +20,14 @@ export class SearchPage implements OnInit {
   public authenticated: boolean;
   public searchList: Repairman[];
   public selectedRepairman: Repairman;
-  public headerTitle: string;
+  public title: string;
 
   constructor(private navCtrl: NavController, private authService: AuthService,
               private alertController: AlertController, private repairsService: RepairsService,
               private repairmanService: RepairmanService, private searchService: SearchService,
-              private elementRef: ElementRef) { }
+              private elementRef: ElementRef) { 
+                this.title = 'Search';
+              }
 
   public refreshSearchList(event: any): void {
     this.selectedRepairman = null;
@@ -40,7 +42,6 @@ export class SearchPage implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.headerTitle = 'Search';
     this.elementRef.nativeElement.querySelector('ion-searchbar')
       .addEventListener('ionInput', this.refreshSearchList.bind(this));
     this.authService.authObservable.subscribe((action) => {

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HeaderModule } from '../header/header.module';
+import { StarsComponent } from '../stars/stars.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { HeaderModule } from '../header/header.module';
     HeaderModule
   ],
   declarations: [
-    HomePage
-  ],
+    HomePage,
+    StarsComponent
+  ]
 })
 export class HomeModule {}

@@ -19,11 +19,14 @@ export class RepairsPage implements OnInit {
   public authenticated: boolean;
   public repairs: Repair[];
   public selectedRepair: Repair;
+  public title: string;
+  public shouldShowBackButton: boolean;
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
     private repairsService: RepairsService
     ) {
+      this.title = 'Repairs';
   }
 
   public ngOnInit(): void {
@@ -62,12 +65,6 @@ export class RepairsPage implements OnInit {
       });
     }
 
-  }
-
-  private getRandomDate(): Date {
-    const start = new Date(2012, 0, 1);
-    const end = new Date();
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
   }
 
   public selectRepair(repair: Repair): void {

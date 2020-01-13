@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start" *ngIf="isRepairmanSelected">
-        <ion-back-button defaultHref="tabs/home" text=""></ion-back-button>
+    <ion-buttons slot="start" *ngIf="shouldShowBackButton">
+        <ion-back-button defaultHref="{{ backUrl }}" text="" (click)="moveBack()"></ion-back-button>
     </ion-buttons>
     <ion-grid style="padding-bottom:0%;">
       <ion-row>

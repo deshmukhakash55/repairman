@@ -28,13 +28,16 @@ export class TrackPage implements OnInit, AfterViewInit {
   private map: any;
   @ViewChild('map', {static: false}) mapReference: ElementRef;
   public headerTitle: string;
+  public title: string;
+  public shouldShowBackButton: boolean;
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
-    private repairmanService: RepairmanService, private platform: Platform,
-    private geolocation: Geolocation, private elementRef: ElementRef, private repairsService: RepairsService,
-    private callNumber: CallNumber
+    private platform: Platform, private geolocation: Geolocation,
+    private repairsService: RepairsService, private callNumber: CallNumber
     ) {
+      this.title = 'Track';
+      this.shouldShowBackButton = true;
   }
 
   private initMap(): void {
@@ -106,6 +109,11 @@ export class TrackPage implements OnInit, AfterViewInit {
 
   public callRepairman(): void {
     this.callNumber.callNumber(this.selectedRepairman.mobile, true);
+  }
+
+  public unselectRepairman(event: any): void {
+    this.navCtrl.navigateRoot('tabs/repairs');
+    this.shouldShowBackButton = false;
   }
 
   public backToHome(): void {

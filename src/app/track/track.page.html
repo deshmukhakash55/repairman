@@ -25,7 +25,7 @@
   </ion-toolbar>
 </ion-header> -->
 
-<app-header></app-header>
+<app-header [title]="title" [shouldShowBackButton]="shouldShowBackButton" (backButtonClick)="unselectRepairman($event)"></app-header>
 <ion-content>
   <div #map id="map" style="visibility: visible; height: 50%;"></div>
   <ion-grid>
