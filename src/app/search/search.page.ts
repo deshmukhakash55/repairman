@@ -71,7 +71,7 @@ export class SearchPage implements OnInit {
           text: 'Okay',
           handler: () => {
             console.log('Confirm Okay');
-            this.callRepairman();
+            this.payAndCall();
           }
         }
       ]
@@ -80,14 +80,12 @@ export class SearchPage implements OnInit {
     await alert.present();
   }
 
-  private callRepairman(): void {
+  private payAndCall(): void {
     // TODO Send Data to backend
 
-    this.repairsService.addRepair(this.selectedRepairman);
-    this.repairmanService.removeRepairman(this.selectedRepairman);
+    this.repairmanService.selectRepairman(this.selectedRepairman);
     this.selectedRepairman = null;
-    this.navCtrl.navigateRoot('tabs/repairs');
-
+    this.navCtrl.navigateRoot('payment');
   }
 
   public selectRepairman(repairman: Repairman): void {

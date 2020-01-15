@@ -1,5 +1,5 @@
 import { AlertController } from '@ionic/angular';
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, NgZone } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AuthActions, IAuthAction } from 'ionic-appauth';
 import { AuthService } from '../auth/auth.service';
@@ -22,6 +22,7 @@ export class HomePage implements OnInit, AfterViewChecked {
   public repairmen: Repairman[];
   public selectedRepairman: Repairman;
   public shouldShowBackButton: boolean;
+  public availabilityStatus: string;
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
@@ -43,7 +44,15 @@ export class HomePage implements OnInit, AfterViewChecked {
     });
 
     this.repairmanService.getRepairmen().subscribe( (repairmen: Repairman[]) => {
-      this.repairmen = repairmen;
+      this.repairmen = repairmen.sort( (A: Repairman, B: Repairman) => {
+        if (A.status !== 'available' && B.status === 'available') {
+          return 1;
+        }
+        if (B.status !== 'available' && A.status === 'available') {
+          return -1;
+        }
+        return B.sortPriority - A.sortPriority;
+      });
     });
 
   }
@@ -57,7 +66,15 @@ export class HomePage implements OnInit, AfterViewChecked {
     //   }
     // });
     this.repairmanService.getRepairmen().subscribe( (repairmen: Repairman[]) => {
-      this.repairmen = repairmen;
+      this.repairmen = repairmen.sort( (A: Repairman, B: Repairman) => {
+        if (A.status !== 'available' && B.status === 'available') {
+          return 1;
+        }
+        if (B.status !== 'available' && A.status === 'available') {
+          return -1;
+        }
+        return B.sortPriority - A.sortPriority;
+      });
     });
   }
 
@@ -98,8 +115,17 @@ export class HomePage implements OnInit, AfterViewChecked {
 
   public selectRepairman(repairman: Repairman): void {
     this.selectedRepairman = repairman;
+    this.loadAvailabilityStatus();
     this.repairmanService.selectselectedRepairmanFromHome(repairman);
     this.shouldShowBackButton = true;
+  }
+
+  private loadAvailabilityStatus(): void {
+    if (this.selectedRepairman.status === 'available') {
+      this.availabilityStatus = 'right now';
+      return;
+    }
+    this.availabilityStatus = 'at ' + this.selectedRepairman.status;
   }
 
   public unselectRepairman(event: any): void {

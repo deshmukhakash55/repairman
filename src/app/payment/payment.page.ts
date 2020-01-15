@@ -10,7 +10,6 @@ import { WebIntent } from '@ionic-native/web-intent/ngx';
 import { RepairmanService } from '../services/repairman.service';
 import { RepairsService } from '../services/repairs.service';
 import * as uuid from 'uuid';
-import { resolve } from 'url';
 
 @Component({
   selector: 'app-payment',
@@ -26,6 +25,7 @@ export class PaymentPage implements OnInit {
   public selectedRepairman: Repairman;
   public shouldShowBackButton: boolean;
   private repairCalled: boolean;
+  public waitingMessage: string;
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
@@ -34,11 +34,27 @@ export class PaymentPage implements OnInit {
     ) {
       this.title = 'Payment';
       this.shouldShowBackButton = true;
-
+      this.waitingMessage = null;
+      this.setTimelyChecksOnSelectedRepairman();
       this.repairmanService.getSelectedRepairman().subscribe( (repairman: Repairman) => {
         this.selectedRepairman = repairman;
-        console.log(this.selectedRepairman);
       });
+  }
+
+  private setTimelyChecksOnSelectedRepairman(): void {
+    setTimeout(() => {
+      if (!this.selectedRepairman) {
+        this.waitingMessage = 'Looks like we\'re facing problems. Trying hard.....';
+        setTimeout(() => {
+          if (!this.selectedRepairman) {
+            this.waitingMessage = 'Taking you back home.....';
+            setTimeout(() => {
+              this.navCtrl.navigateRoot('/tabs/home');
+            }, 2500);
+          }
+        }, 7500);
+      }
+    }, 5000);
   }
 
   public ngOnInit(): void {
@@ -69,7 +85,7 @@ export class PaymentPage implements OnInit {
     };
 
     this.webIntent.startActivity(options).then( () => {
-      this.addRepairs();
+      this.addRepairs('upi');
     },
     () => {
       console.log('Error');
@@ -89,7 +105,7 @@ export class PaymentPage implements OnInit {
         }, {
           text: 'Okay',
           handler: () => {
-            this.addRepairs();
+            this.addRepairs('cash');
           }
         }
       ]
@@ -98,9 +114,10 @@ export class PaymentPage implements OnInit {
     await alert.present();
   }
 
-  private addRepairs(): void {
+  private async addRepairs(paymentMode: string): Promise<any> {
+    await this.getUserInfo();
     new Promise( (resolve: any, reject: any) => {
-      this.repairsService.addRepair(this.selectedRepairman);
+      this.repairsService.addRepair(this.selectedRepairman, paymentMode, this.userInfo.user_name);
       resolve();
     }).then( () => {
       this.repairsService.selectRepairWithRepairman(this.selectedRepairman);

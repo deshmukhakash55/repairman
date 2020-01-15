@@ -67,10 +67,15 @@
     </ion-row>
     <ion-row margin-vertical padding-start>
       <ion-col>
-        Charges : <span style="color: rgb(56, 128, 255);">Rs.50/hr</span>
+        Charges : <span style="color: rgb(56, 128, 255);">Rs.{{ selectedRepairman.charges }}/hr</span>
       </ion-col>
     </ion-row>
-    <ion-row margin-vertical padding-start>
+    <ion-row *ngIf="availabilityStatus !== 'right now'" margin-vertical padding-start>
+      <ion-col>
+        Available {{ this.availabilityStatus }}   
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="availabilityStatus === 'right now'" margin-vertical padding-start>
       <ion-col>
         Estimated time to reach : 20 - 30 min.   
       </ion-col>

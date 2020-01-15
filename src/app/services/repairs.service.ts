@@ -2,6 +2,8 @@ import { Repairman } from './../home/hometypes';
 import { Injectable } from '@angular/core';
 import { Repair } from '../repairs/repairtypes';
 import { Observable, of } from 'rxjs';
+import * as uuid from 'uuid';
+import { PaymentPageModule } from '../payment/payment.module';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +31,16 @@ export class RepairsService {
     this.selectedRepair = this.repairs.find( (repair: Repair) => repair.repairman.id === repairman.id);
   }
 
-  public addRepair(repairman: Repairman): void {
-    const repair = {
+  public addRepair(repairman: Repairman, selectedPaymentMode: string, customerId: string): void {
+    const repairId = uuid.v4();
+    const repair: Repair = {
+      id: repairId,
       repairman: {...repairman},
       status: 'active',
+      paymentMode: selectedPaymentMode,
+      feedback: '',
+      starsForService: -1,
+      customer: customerId,
       date: new Date()
     };
     if (this.repairs) {
