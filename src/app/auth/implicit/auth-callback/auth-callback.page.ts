@@ -21,10 +21,9 @@ export class AuthCallbackPage implements OnInit {
     this.authService.AuthorizationCallBack(this.router.url);
     this.authService.authObservable
       .pipe(skipWhile(action => action.action !== AuthActions.SignInSuccess
-        && action.action !== AuthActions.SignInFailed
-        && action.action !== AuthActions.AutoSignInSuccess
-        && action.action !== AuthActions.AutoSignInFailed), take(1))
+        && action.action !== AuthActions.AutoSignInSuccess), take(1))
       .subscribe((action) => {
+        console.log(action.action);
         if (action.action === AuthActions.SignInSuccess || action.action === AuthActions.AutoSignInSuccess) {
           this.navCtrl.navigateRoot('tabs');
         } else {

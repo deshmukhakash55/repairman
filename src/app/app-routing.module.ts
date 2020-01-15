@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'track',
     loadChildren: () => import('./track/track.module').then( m => m.TrackPageModule)
+  },
+  {
+    path: 'payment',
+    loadChildren: () => import('./payment/payment.module').then( m => m.PaymentPageModule)
   }
 ];
 @NgModule({

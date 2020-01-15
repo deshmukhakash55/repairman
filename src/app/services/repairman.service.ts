@@ -57,7 +57,7 @@ export class RepairmanService {
   }
 
   public removeRepairman(repairman: Repairman): void {
-    delete this.repairmen[this.repairmen.indexOf(repairman)];
+    this.repairmen = this.repairmen.filter( (arepairman: Repairman) => arepairman.id !== repairman.id);
   }
 
   public selectRepairman(repairman: Repairman): void{

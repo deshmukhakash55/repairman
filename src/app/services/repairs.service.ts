@@ -25,6 +25,10 @@ export class RepairsService {
     this.selectedRepair = repair;
   }
 
+  public selectRepairWithRepairman(repairman: Repairman): void {
+    this.selectedRepair = this.repairs.find( (repair: Repair) => repair.repairman.id === repairman.id);
+  }
+
   public addRepair(repairman: Repairman): void {
     const repair = {
       repairman: {...repairman},

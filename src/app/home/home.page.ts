@@ -7,9 +7,6 @@ import { IUserInfo } from '../auth/user-info.model';
 import { Repairman } from './hometypes';
 import { RepairsService } from '../services/repairs.service';
 import { RepairmanService } from '../services/repairman.service';
-import { Repair } from '../repairs/repairtypes';
-
-declare var google: any;
 
 @Component({
   selector: 'app-home',
@@ -64,7 +61,7 @@ export class HomePage implements OnInit, AfterViewChecked {
     });
   }
 
-  public async presentConfirmCallOption() {
+  public async presentConfirmCallOption(): Promise<any> {
     const alert = await this.alertController.create({
       header: 'Call ' + this.selectedRepairman.name,
       message: '<br>Charges will Rs.50/hr (excluding other extra material) <br><br>  ETA: 20-30 min',
@@ -73,14 +70,11 @@ export class HomePage implements OnInit, AfterViewChecked {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
+          handler: () => {}
         }, {
-          text: 'Okay',
+          text: 'Call',
           handler: () => {
-            console.log('Confirm Okay');
-            this.callRepairman();
+            this.payAndCall();
           }
         }
       ]
@@ -89,34 +83,17 @@ export class HomePage implements OnInit, AfterViewChecked {
     await alert.present();
   }
 
-  private callRepairman(): void {
+  private payAndCall(): void {
     // TODO Send Data to backend
 
-    this.addRepairs().then( () => {
-      this.repairmanService.removeRepairman(this.selectedRepairman);
-      this.selectedRepairman = null;
-      this.navCtrl.navigateRoot('tabs/repairs');
-    })
-    .catch( () => {
-      console.log('Something went wrong');
-    });
-
+    this.repairmanService.selectRepairman(this.selectedRepairman);
+    this.selectedRepairman = null;
+    this.navCtrl.navigateRoot('payment');
   }
 
   public scrollDown(event: any) {
     console.log(event.detail);
     // loadMoreRepairmenFromBackend
-  }
-
-  private addRepairs(): Promise<any> {
-    return new Promise( (resolve: any, reject: any) => {
-      try {
-        this.repairsService.addRepair(this.selectedRepairman);
-        resolve('Successfully added');
-      } catch (exception) {
-        reject('Unsuccessful repair addition');
-      }
-    });
   }
 
   public selectRepairman(repairman: Repairman): void {

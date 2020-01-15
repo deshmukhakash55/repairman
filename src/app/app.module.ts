@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
-
+import { WebIntent } from '@ionic-native/web-intent/ngx';
 import { RepairsService } from './services/repairs.service';
 import { RepairmanService } from './services/repairman.service';
 import { SearchService } from './services/search.service';
@@ -34,7 +34,8 @@ import { AddressService } from './services/address.service';
     AddressService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation,
-    CallNumber
+    CallNumber,
+    WebIntent
   ],
   bootstrap: [AppComponent]
 })
