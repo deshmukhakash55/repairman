@@ -24,7 +24,7 @@ export class PaymentPage implements OnInit {
   public repairmen: Repairman[];
   public selectedRepairman: Repairman;
   public shouldShowBackButton: boolean;
-  private repairCalled: boolean;
+  public repairCalled: boolean;
   public waitingMessage: string;
 
   constructor(
@@ -72,6 +72,7 @@ export class PaymentPage implements OnInit {
 
   public backButtonClicked(): void {
     if (this.repairCalled) {
+      this.repairmanService.selectselectedRepairmanFromHome(null);
       this.navCtrl.navigateRoot('/track');
     }
     this.navCtrl.navigateRoot('/tabs/home');
@@ -122,7 +123,9 @@ export class PaymentPage implements OnInit {
     }).then( () => {
       this.repairsService.selectRepairWithRepairman(this.selectedRepairman);
       this.repairmanService.removeRepairman(this.selectedRepairman);
+      this.selectedRepairman = null;
       this.repairCalled = true;
+      this.repairmanService.selectselectedRepairmanFromHome(null);
       this.navCtrl.navigateRoot('/track');
     });
   }

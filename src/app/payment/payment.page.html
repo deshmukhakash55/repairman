@@ -2,7 +2,7 @@
 
 <ion-content>
 
-  <div *ngIf="!selectedRepairman" style="padding-top: 0px;">
+  <div *ngIf="!selectedRepairman && !repairCalled" style="padding-top: 0px;">
     <div>
         Loading Payment Page for you. <br>
     </div>
@@ -12,6 +12,17 @@
       <span class="dot"></span>
     </div>
     <div *ngIf="waitingMessage" style="padding-top: 10px;">{{ waitingMessage }}</div>
+  </div>
+
+  <div *ngIf="repairCalled" style="padding-top: 0px;">
+    <div>
+        Taking you to tracking page <br>
+    </div>
+    <div id="wave">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
   </div>
 
   <ion-grid *ngIf="selectedRepairman">

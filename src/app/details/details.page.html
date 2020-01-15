@@ -1,13 +1,18 @@
 <app-header [title]="title" [shouldShowBackButton]="shouldShowBackButton" (backButtonClick)="unselectRepairman($event)"></app-header>
+
 <ion-content>
-  <div #map id="map" style="visibility: visible; height: 50%;"></div>
   <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-img src="/assets/{{ selectedRepairman.id }}.jpg"></ion-img>
+      </ion-col>
+    </ion-row>
     <ion-row margin-vertical>
       <ion-col size="10">
         <ion-title style="text-align: left;padding-left: 13%;">{{ selectedRepairman.name }}</ion-title>
       </ion-col>
       <ion-col size="2" style="padding-left: 0%;" padding-horizontal>
-        <ion-button class="primary" (click)="callRepairman()">
+        <ion-button class="primary" (click)="presentConfirmCallOption()">
           <ion-icon name="call"></ion-icon>
         </ion-button>
       </ion-col>
@@ -17,7 +22,7 @@
         <ion-icon name="hammer"></ion-icon> {{ selectedRepairman.ability }}    
       </ion-col>
       <ion-col size="2">
-        {{ selectedRepairman.stars }} <ion-icon name="star" style="color: #CFB53B;"></ion-icon>  
+        {{ selectedRepairman.stars }} <ion-icon name="star" style="color: #CFB53B;"></ion-icon> 
       </ion-col>
     </ion-row>
     <ion-row margin-vertical padding-start>
@@ -25,7 +30,12 @@
         Charges : <span style="color: rgb(56, 128, 255);">Rs.{{ selectedRepairman.charges }}/hr</span>
       </ion-col>
     </ion-row>
-    <ion-row margin-vertical padding-start>
+    <ion-row *ngIf="availabilityStatus !== 'right now'" margin-vertical padding-start>
+      <ion-col>
+        Available {{ this.availabilityStatus }}   
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="availabilityStatus === 'right now'" margin-vertical padding-start>
       <ion-col>
         Estimated time to reach : 20 - 30 min.   
       </ion-col>

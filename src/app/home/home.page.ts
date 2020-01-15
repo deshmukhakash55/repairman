@@ -26,10 +26,15 @@ export class HomePage implements OnInit, AfterViewChecked {
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
-    private alertController: AlertController, private repairsService: RepairsService,
     private repairmanService: RepairmanService
     ) {
       this.title = 'Home';
+      this.shouldShowBackButton = false;
+      this.repairmanService.getselectedRepairmanFromHome().subscribe( (repairman: Repairman) => {
+        if (repairman) {
+          this.navCtrl.navigateRoot('/details');
+        }
+      });
   }
 
   public ngOnInit(): void {
@@ -43,28 +48,15 @@ export class HomePage implements OnInit, AfterViewChecked {
       }
     });
 
-    this.repairmanService.getRepairmen().subscribe( (repairmen: Repairman[]) => {
-      this.repairmen = repairmen.sort( (A: Repairman, B: Repairman) => {
-        if (A.status !== 'available' && B.status === 'available') {
-          return 1;
-        }
-        if (B.status !== 'available' && A.status === 'available') {
-          return -1;
-        }
-        return B.sortPriority - A.sortPriority;
-      });
-    });
+    this.loadRepairmen();
 
   }
 
   public ngAfterViewChecked(): void {
-    // this.repairsService.getRepairs().subscribe( (repairs: Repair[]) => {
-    //   if (repairs) {
-    //     const calledRepairmenIds = repairs.map( (repair: Repair) => repair.repairman.id);
-    //     const repairmen = this.repairmen;
-    //     this.repairmen = repairmen.filter( (repairman: Repairman) => calledRepairmenIds.indexOf(repairman.id) === -1 );
-    //   }
-    // });
+    this.loadRepairmen();
+  }
+
+  private loadRepairmen(): void {
     this.repairmanService.getRepairmen().subscribe( (repairmen: Repairman[]) => {
       this.repairmen = repairmen.sort( (A: Repairman, B: Repairman) => {
         if (A.status !== 'available' && B.status === 'available') {
@@ -76,36 +68,6 @@ export class HomePage implements OnInit, AfterViewChecked {
         return B.sortPriority - A.sortPriority;
       });
     });
-  }
-
-  public async presentConfirmCallOption(): Promise<any> {
-    const alert = await this.alertController.create({
-      header: 'Call ' + this.selectedRepairman.name,
-      message: '<br>Charges will Rs.50/hr (excluding other extra material) <br><br>  ETA: 20-30 min',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {}
-        }, {
-          text: 'Call',
-          handler: () => {
-            this.payAndCall();
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  private payAndCall(): void {
-    // TODO Send Data to backend
-
-    this.repairmanService.selectRepairman(this.selectedRepairman);
-    this.selectedRepairman = null;
-    this.navCtrl.navigateRoot('payment');
   }
 
   public scrollDown(event: any) {
@@ -115,25 +77,11 @@ export class HomePage implements OnInit, AfterViewChecked {
 
   public selectRepairman(repairman: Repairman): void {
     this.selectedRepairman = repairman;
-    this.loadAvailabilityStatus();
     this.repairmanService.selectselectedRepairmanFromHome(repairman);
-    this.shouldShowBackButton = true;
-  }
-
-  private loadAvailabilityStatus(): void {
-    if (this.selectedRepairman.status === 'available') {
-      this.availabilityStatus = 'right now';
-      return;
-    }
-    this.availabilityStatus = 'at ' + this.selectedRepairman.status;
+    this.navCtrl.navigateRoot('/details');
   }
 
   public unselectRepairman(event: any): void {
-    this.selectedRepairman = null;
-    this.shouldShowBackButton = false;
-  }
-
-  public backToHome(): void {
     this.selectedRepairman = null;
   }
 
