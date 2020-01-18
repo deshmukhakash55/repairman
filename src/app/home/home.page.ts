@@ -1,12 +1,12 @@
-import { AlertController } from '@ionic/angular';
-import { Component, OnInit, AfterViewChecked, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AuthActions, IAuthAction } from 'ionic-appauth';
 import { AuthService } from '../auth/auth.service';
 import { IUserInfo } from '../auth/user-info.model';
 import { Repairman } from './hometypes';
-import { RepairsService } from '../services/repairs.service';
+import { FeedbackService } from '../services/feedback.service';
 import { RepairmanService } from '../services/repairman.service';
+import { Feedback } from '../services/commontypes';
 
 @Component({
   selector: 'app-home',
@@ -23,10 +23,16 @@ export class HomePage implements OnInit, AfterViewChecked {
   public selectedRepairman: Repairman;
   public shouldShowBackButton: boolean;
   public availabilityStatus: string;
+  public isFeedbackPending: boolean;
+  public pendingFeedback: Feedback;
+  private starFeedback: number;
+  public textFeedback: string;
+  public sendFeedbackDisabled: boolean;
+  public shouldShowAddresses: boolean;
 
   constructor(
     private navCtrl: NavController, private authService: AuthService,
-    private repairmanService: RepairmanService
+    private repairmanService: RepairmanService, private feedbackService: FeedbackService
     ) {
       this.title = 'Home';
       this.shouldShowBackButton = false;
@@ -34,6 +40,15 @@ export class HomePage implements OnInit, AfterViewChecked {
         if (repairman) {
           this.navCtrl.navigateRoot('/details');
         }
+      });
+      this.isFeedbackPending = false;
+      this.sendFeedbackDisabled = true;
+      this.feedbackService.getPendingFeedback().subscribe( (pendingFeedbacks: Feedback[]) => {
+        this.pendingFeedback = pendingFeedbacks[0];
+        this.starFeedback = 0;
+        this.title = 'Feedback for ' + this.pendingFeedback.repairmanName;
+        this.isFeedbackPending = true;
+        this.shouldShowAddresses = false;
       });
   }
 
@@ -54,6 +69,28 @@ export class HomePage implements OnInit, AfterViewChecked {
 
   public ngAfterViewChecked(): void {
     this.loadRepairmen();
+  }
+
+  public sendFeedback(): void {
+    const feedback = {
+      repairId: this.pendingFeedback.repairId,
+      repairmanName: this.pendingFeedback.repairmanName,
+      stars: this.starFeedback,
+      feedback: this.textFeedback,
+      date: new Date()
+    };
+    this.pendingFeedback = null;
+    this.feedbackService.setPendingFeedback(feedback);
+    this.isFeedbackPending = false;
+    this.title = 'Home';
+    this.shouldShowAddresses = true;
+  }
+
+  public starsUpdated(stars: number): void {
+    this.starFeedback = stars;
+    if (this.starFeedback) {
+      this.sendFeedbackDisabled = false;
+    }
   }
 
   private loadRepairmen(): void {

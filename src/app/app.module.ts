@@ -19,6 +19,7 @@ import { RepairmanService } from './services/repairman.service';
 import { SearchService } from './services/search.service';
 import { AddressService } from './services/address.service';
 import { NativeGeocoder} from '@ionic-native/native-geocoder/ngx';
+import { FeedbackService } from './services/feedback.service';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { NativeGeocoder} from '@ionic-native/native-geocoder/ngx';
     RepairmanService,
     SearchService,
     AddressService,
+    FeedbackService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation,
     CallNumber,

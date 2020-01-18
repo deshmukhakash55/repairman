@@ -5,12 +5,12 @@
     </ion-buttons>
     <ion-grid style="padding-bottom:0%;">
       <ion-row>
-        <ion-col size="3" style="padding-bottom:0%;">
+        <ion-col *ngIf="shouldShowAddresses" size="3" style="padding-bottom:0%;">
           <ion-select value="{{ selectedAddress.name }}" okText="Okay" cancelText="Dismiss" (ionChange)="changeAddress($event)">
             <ion-select-option value="{{ address.name }}" *ngFor="let address of addresses">{{ address.name }}</ion-select-option>
           </ion-select>
         </ion-col>
-        <ion-col size="8" style="padding-top: 0%;padding-bottom: 0%;">
+        <ion-col style="padding-top: 0%;padding-bottom: 0%;">
           <ion-item style="--inner-border-width: 0px;">
             <ion-title style="padding-left: 0%;">
               {{ title }}

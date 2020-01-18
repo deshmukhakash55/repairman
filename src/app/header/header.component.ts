@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit, AfterViewChecked {
   @Input('title') public title: string;
   @Output() backButtonClick = new EventEmitter<string>();
   @Input('shouldShowBackButton')public shouldShowBackButton: boolean;
+  @Input('shouldShowAddresses')public shouldShowAddresses: boolean;
   public addresses: Address[];
   public selectedAddress: Address;
   public backUrl: string;
@@ -31,7 +32,9 @@ export class HeaderComponent implements OnInit, AfterViewChecked {
     private addressService: AddressService, public zone: NgZone,
     public geolocation: Geolocation, private nativeGeocoder: NativeGeocoder,
     private platform: Platform
-    ) {}
+    ) {
+      this.shouldShowAddresses = true;
+    }
 
   public ngOnInit(): void {
 

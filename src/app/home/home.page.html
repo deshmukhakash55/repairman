@@ -1,16 +1,48 @@
-<app-header [title]="title"></app-header>
+<div *ngIf="isFeedbackPending" style="width: 100%; height: 100%;">
+  <app-header [title]="title" [shouldShowAddresses]="shouldShowAddresses"></app-header>
 
-<ion-content (ionScrollEnd)="scrollDown($event)" [scrollEvents]="true">
-  <div *ngIf="!selectedRepairman">
-    <ion-card class="welcome-card" *ngFor="let repairman of repairmen;" (click)="selectRepairman(repairman)">
-      <ion-img src="/assets/{{ repairman.id }}.jpg"></ion-img>
-      <ion-card-header>
-        <ion-card-title>{{ repairman.name }}</ion-card-title>
-        <ion-card-subtitle>{{ repairman.ability }}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <app-stars [stars]="repairman.stars"></app-stars>
-      </ion-card-content>
-    </ion-card>
-  </div>
-</ion-content> 
+  <ion-content>
+    <div>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-textarea rows="6" cols="20" style="background-color: #ccc;padding: 7px;margin-bottom: 13px;" placeholder="Enter your feedback here..." [(ngModel)]="textFeedback"></ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col style="padding-left:35%;">
+            <app-star-input style="margin-bottom: 13px;" (updateStarsFeedback)="starsUpdated($event)"></app-star-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button (click)="sendFeedback()" [disabled]="sendFeedbackDisabled" style="background-color: rgb(56, 128, 255);display:block;border-radius:10px;">
+              Send Feedback
+            </ion-button> 
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-content>
+</div>
+
+<div *ngIf="!isFeedbackPending" style="width: 100%; height: 100%;">
+  <app-header [title]="title"></app-header>
+
+  <ion-content (ionScrollEnd)="scrollDown($event)" [scrollEvents]="true">
+    <div *ngIf="!selectedRepairman">
+      <ion-card class="welcome-card" *ngFor="let repairman of repairmen;" (click)="selectRepairman(repairman)">
+        <ion-img src="/assets/{{ repairman.id }}.jpg"></ion-img>
+        <ion-card-header>
+          <ion-card-title>{{ repairman.name }}</ion-card-title>
+          <ion-card-subtitle>{{ repairman.ability }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <app-stars [stars]="repairman.stars"></app-stars>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-content>
+</div>

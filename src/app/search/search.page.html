@@ -11,7 +11,7 @@
         <ion-card-subtitle>{{  repairman.ability }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        <p>{{ repairman.stars }} stars</p>
+        <app-stars [stars]="repairman.stars"></app-stars>
       </ion-card-content>
     </ion-card>
   </div>

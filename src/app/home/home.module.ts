@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HeaderModule } from '../header/header.module';
-import { StarsComponent } from '../stars/stars.component';
+import { CoreModule } from '../core/core.module';
 
 @NgModule({
   imports: [
@@ -13,11 +13,11 @@ import { StarsComponent } from '../stars/stars.component';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: HomePage }]),
-    HeaderModule
+    HeaderModule,
+    CoreModule
   ],
   declarations: [
-    HomePage,
-    StarsComponent
+    HomePage
   ]
 })
 export class HomeModule {}
